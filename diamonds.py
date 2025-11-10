@@ -37,7 +37,11 @@ X = diamonds.drop("price", axis=1)
 y = diamonds[["price"]]
 from pyod.models.iforest import IForest
 
-iforest = IForest(n_estimators=1000)
+iforest = IForest(n_estimators=1000,
+                    contamination=0.05,
+                    max_samples=1000,
+                    random_state=42)
+
 iforest.fit(X)  
 
 # Extract the labels
