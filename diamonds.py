@@ -1,9 +1,10 @@
 import pandas as pd
 import seaborn as sns
 from pyod.models.mad import MAD
+import matplotlib.pyplot as plt
+pd.set_option('display.max_columns', None)
 
 diamonds = sns.load_dataset("diamonds")
-# Extract the feature we want
 X = diamonds[["price"]]
 
 
@@ -11,10 +12,10 @@ mad = MAD().fit(X)
 
 labels = pd.Series(mad.labels_, name="outlier_label")
 diamonds["outlier_label"] = labels
-print(diamonds[diamonds['outlier_label']==1])
+# print(diamonds[diamonds['outlier_label']==1])
 
 
-diamonds.info()
+print(diamonds.describe())
 
 
 from sklearn.preprocessing import OrdinalEncoder
@@ -38,7 +39,7 @@ y = diamonds[["price"]]
 from pyod.models.iforest import IForest
 
 iforest = IForest(n_estimators=1000,
-                    contamination=0.05,
+                    # contamination=0.05,
                     max_samples=1000,
                     random_state=42)
 
@@ -46,8 +47,15 @@ iforest.fit(X)
 
 # Extract the labels
 labels = iforest.labels_
+diamonds["outlier_label"] = pd.Series(labels, name="outlier_label")
 
-X_outlier_free = X[labels == 0]
-y_outlier_free = y[labels == 0]
 
-print(y_outlier_free)
+plt.figure(figsize=(5, 5))
+
+# Plot non-anomalies then anomalies
+plt.scatter(diamonds[diamonds['outlier_label'] == 0]['depth'], diamonds[diamonds['outlier_label'] == 0]['table'], label='Normal')
+plt.scatter(diamonds[diamonds['outlier_label'] == 1]['depth'], diamonds[diamonds['outlier_label'] == 1]['table'], label='Anomaly')
+plt.xlabel("Carat")
+plt.ylabel("Depth")
+plt.legend()
+plt.show()
