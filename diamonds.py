@@ -5,6 +5,20 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', None)
 
 diamonds = sns.load_dataset("diamonds")
+
+
+# Create the pairplot with a smaller figure size per subplot
+
+
+sns.pairplot(diamonds.sample(500), hue="price")
+plt.tight_layout()
+plt.show()
+
+diamonds.plot(kind='box',figsize=(15,10),subplots=True,layout=(3,3))
+plt.show()
+
+
+
 X = diamonds[["price"]]
 
 
