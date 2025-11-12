@@ -64,12 +64,11 @@ labels = iforest.labels_
 diamonds["outlier_label"] = pd.Series(labels, name="outlier_label")
 
 
-plt.figure(figsize=(5, 5))
 
-# Plot non-anomalies then anomalies
-plt.scatter(diamonds[diamonds['outlier_label'] == 0]['depth'], diamonds[diamonds['outlier_label'] == 0]['table'], label='Normal')
-plt.scatter(diamonds[diamonds['outlier_label'] == 1]['depth'], diamonds[diamonds['outlier_label'] == 1]['table'], label='Anomaly')
-plt.xlabel("Carat")
-plt.ylabel("Depth")
-plt.legend()
+
+
+
+## now another eda with the iforest labels
+sns.pairplot(diamonds.sample(500), hue="outlier_label")
+plt.tight_layout()
 plt.show()
